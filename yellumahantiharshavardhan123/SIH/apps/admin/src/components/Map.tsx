@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import maplibregl, { Map as MLMap, LngLatLike, GeoJSONSource, MapGeoJSONFeature } from 'maplibre-gl';
+import maplibregl, { Map as MLMap, GeoJSONSource } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { createClient } from '../lib/supabaseClient';
-import type { PanicAlert, RiskZone, TouristLocation } from '@tripsafe/shared';
+import type { PanicAlert } from '@tripsafe/shared';
 
 const styleUrl = process.env.NEXT_PUBLIC_MAPTILER_STYLE_URL || `https://api.maptiler.com/maps/streets/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`;
 
@@ -21,7 +21,7 @@ export default function Map() {
 
     map.on('load', async () => {
       const rz = await supabase.from('risk_zones').select('*');
-      const features = (rz.data as any[] | null)?.map(z => z.geojson) || [];
+      const features = (rz.data as any[] | null)?.map(z => ({ ...z.geojson, properties: { ...(z.geojson.properties||{}), level: z.level } })) || [];
       map.addSource('risk_zones', { type: 'geojson', data: { type: 'FeatureCollection', features } as any });
       map.addLayer({ id: 'risk-fill', type: 'fill', source: 'risk_zones', paint: {
         'fill-color': [

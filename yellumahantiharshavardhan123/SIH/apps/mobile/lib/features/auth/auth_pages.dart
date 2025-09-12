@@ -38,7 +38,12 @@ class _AuthPageState extends ConsumerState<AuthPage> {
               } else {
                 await sb.auth.signInWithPassword(email: email.text, password: password.text);
               }
-              if (mounted) context.go('/map');
+              final prof = await sb.from('profiles').select('*').eq('id', sb.auth.currentUser?.id ?? '').single();
+              if ((prof.data['name'] ?? '') == '') {
+                if (mounted) context.go('/profile');
+              } else {
+                if (mounted) context.go('/map');
+              }
             },
             child: Text(isSignup ? 'Sign up' : 'Sign in')
           ),
