@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 import '../../config/maptiler.dart';
-import '../../config/supabase.dart';
 import '../panic/panic.dart';
 import '../geofencing/geofencing.dart';
 import '../safety_score/safety.dart';
@@ -45,9 +44,17 @@ class _MapPageState extends ConsumerState<MapPage> {
         Positioned(
           left: 16, bottom: 16,
           child: Row(children: [
-            ElevatedButton(onPressed: () => ref.read(geofencingProvider.notifier).teleportTo('restricted'), child: const Text('Teleport Restricted')),
+            ElevatedButton(onPressed: () async {
+              await ref.read(geofencingProvider.notifier).teleportTo('restricted');
+              final current = ref.read(geofencingProvider).current;
+              if (current != null) updateSafetyScore(ref, p: current, speed: 0);
+            }, child: const Text('Teleport Restricted')),
             const SizedBox(width: 8),
-            ElevatedButton(onPressed: () => ref.read(geofencingProvider.notifier).teleportTo('medium'), child: const Text('Teleport Medium')),
+            ElevatedButton(onPressed: () async {
+              await ref.read(geofencingProvider.notifier).teleportTo('medium');
+              final current = ref.read(geofencingProvider).current;
+              if (current != null) updateSafetyScore(ref, p: current, speed: 0);
+            }, child: const Text('Teleport Medium')),
           ])
         )
       ]),
