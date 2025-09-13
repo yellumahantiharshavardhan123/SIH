@@ -9,34 +9,46 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) setError(error.message);
-    else alert('Login successful!');
+    else alert('✅ Login successful!');
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '50px auto' }}>
-      <h1>Login</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ display: 'block', marginBottom: 10, width: '100%' }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ display: 'block', marginBottom: 10, width: '100%' }}
-      />
-      <button onClick={handleLogin}>Login</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-sm bg-white shadow-md rounded-lg p-6">
+        <h1 className="text-2xl font-bold mb-4">Login</h1>
+        {error && <p className="text-red-500 mb-3">{error}</p>}
+        <form onSubmit={handleLogin} className="flex flex-col gap-3">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 rounded"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
