@@ -2,11 +2,17 @@ import './globals.css';
 import type { ReactNode } from 'react';
 import AccountMenu from '../src/components/AccountMenu';
 
+export const metadata = {
+  title: 'TripSafe Admin',
+  description: 'Tourist safety system admin panel',
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-white text-slate-800">
         <div className="min-h-screen grid grid-cols-[240px_1fr]">
+          {/* Sidebar */}
           <aside className="bg-slate-50 border-r">
             <div className="p-4 text-xl font-semibold text-brand">TripSafe</div>
             <nav className="flex flex-col gap-2 p-4 text-sm">
@@ -17,11 +23,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <a href="/reports" className="hover:text-brand">Reports</a>
             </nav>
           </aside>
+
+          {/* Main content */}
           <main className="p-4">
             <div className="mb-4 flex items-center justify-end">
               <AccountMenu />
             </div>
-            {children}
+            <div className="p-2">{children}</div>
           </main>
         </div>
       </body>
