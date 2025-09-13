@@ -1,46 +1,52 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabaseClient'; // keep your existing client
 
-export default function Signup() {
-  const router = useRouter();
+import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+
+export default function SignupPage() {
+  const supabase = createClientComponentClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const { error } = await supabase.auth.signUp({
+  const handleSignup = async () => {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } }
     });
 
     if (error) {
       setError(error.message);
+      setSuccess('');
     } else {
-      // Redirect to login page after signup
-      router.push('/login');
+      setError('');
+      setSuccess('Signup successful! Please check your email.');
     }
-    setLoading(false);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
+    <div style={{ maxWidth: 400, margin: '50px auto' }}>
       <h1>Signup</h1>
-      <form style={{ display: 'flex', flexDirection: 'column', width: '300px', gap: '10px' }} onSubmit={handleSignup}>
-        <input type="text" placeholder="Full Name" value={fullName} onChange={e => setFullName(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Signup'}</button>
-      </form>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ display: 'block', marginBottom: 10, width: '100%' }}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ display: 'block', marginBottom: 10, width: '100%' }}
+      />
+      <button onClick={handleSignup} style={{ width: '100%' }}>
+        Sign Up
+      </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      {success && <p style={{ color: 'green' }}>{success}</p>}
     </div>
   );
 }
