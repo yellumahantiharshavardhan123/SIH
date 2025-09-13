@@ -1,5 +1,6 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import AccountMenu from '../src/components/AccountMenu';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +17,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <a href="/reports" className="hover:text-brand">Reports</a>
             </nav>
           </aside>
-          <main className="p-4">{children}</main>
+          <main className="p-4">
+            <div className="mb-4 flex items-center justify-end">
+              <AccountMenu />
+            </div>
+            {children}
+          </main>
         </div>
       </body>
     </html>
