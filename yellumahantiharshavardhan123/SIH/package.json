@@ -1,13 +1,16 @@
 {
-  "name": "tripsafe-monorepo",
+  "name": "admin",
+  "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "apps/admin",
-    "packages/shared"
-  ],
-  "packageManager": "npm@10.5.0",
   "scripts": {
-    "build": "npm -w apps/admin run build && npm -w packages/shared run build",
-    "dev": "npm -w apps/admin run dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "@supabase/supabase-js": "latest"
   }
 }
