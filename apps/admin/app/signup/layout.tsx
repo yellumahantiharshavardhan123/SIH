@@ -1,4 +1,4 @@
- // apps/admin/app/signup/layout.tsx
+// apps/admin/app/signup/layout.tsx
 import type { ReactNode } from "react";
 
 export default function SignupLayout({ children }: { children: ReactNode }) {
